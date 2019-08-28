@@ -141,12 +141,8 @@ export class Search extends Component {
     }
     search =  () =>{
         let {v1,v2,v3} = this.state;
-        if(!v1){
-            message.error('节点1必填');
-            return;
-        }
-        if(!v3){
-            message.error('节点2必填');
+        if(!v1 && !v2 && !v3){
+            message.error('不能全为空');
             return;
         }
         // console.log(info);
@@ -154,7 +150,7 @@ export class Search extends Component {
             return v.id;
         })
         const { graph, graphView } = info;
-        axios.post('http://xorder.live:22222/neo4j_browser/getPathsByDegree',{node1 : v1 , node2 : v3 ,existingNodes : ids}).then(obj=>{
+        axios.post('http://xorder.live:22222/neo4j_browser/getPathsByDegree',{node1 : v1 , node2 : v3 ,existingNodes : ids , relation : v2}).then(obj=>{
             console.log(obj);
             let result = obj.data.results;
             if(result.length > 0 ){
