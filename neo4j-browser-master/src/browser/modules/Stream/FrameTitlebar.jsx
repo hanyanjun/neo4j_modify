@@ -190,10 +190,20 @@ class FrameTitlebar extends Component {
           >
             {expandCollapseIcon}
           </FrameButton>
+          
           <Render if={['cypher', 'style'].includes(frame.type)}>
-            <FrameButton
+            {/* <FrameButton
               data-testid='rerunFrameButton'
               title='Rerun'
+              onClick={() =>
+                props.onReRunClick(frame.cmd, frame.id, frame.requestId)
+              }
+            >
+              <RefreshIcon />
+            </FrameButton> */}
+            <FrameButton
+              data-testid='rerunFrameButton'
+              title='Clear'
               onClick={() =>
                 props.onReRunClick(frame.cmd, frame.id, frame.requestId)
               }
