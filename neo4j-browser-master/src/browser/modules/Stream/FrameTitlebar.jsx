@@ -58,6 +58,7 @@ import {
   downloadPNGFromSVG,
   downloadSVG
 } from 'shared/services/exporting/imageUtils'
+import Search from "../search/search";
 import {
   stringifyResultArray,
   transformResultRecordsToResultArray
@@ -85,6 +86,10 @@ class FrameTitlebar extends Component {
     const { svgElement, graphElement, type } = this.props.visElement
     downloadPNGFromSVG(svgElement, graphElement, type)
   }
+  // 默认全屏显示
+  componentDidMount(){
+    this.props.fullscreenToggle();
+  }
   exportSVG () {
     const { svgElement, graphElement, type } = this.props.visElement
     downloadSVG(svgElement, graphElement, type)
@@ -111,14 +116,16 @@ class FrameTitlebar extends Component {
     const cmd = removeComments(frame.cmd)
     return (
       <StyledFrameTitleBar>
-        <StyledFrameCommand>
+        {/* <StyledFrameCommand>
+          默认关闭match语句
           <DottedLineHover
             data-testid='frameCommand'
             onClick={() => props.onTitlebarClick(frame.cmd)}
           >
             {cmd}
           </DottedLineHover>
-        </StyledFrameCommand>
+        </StyledFrameCommand> */}
+          <Search></Search> 
         <FrameTitlebarButtonSection>
           <Render if={this.canExport()}>
             <DropdownButton data-testid='frame-export-dropdown'>
@@ -164,7 +171,8 @@ class FrameTitlebar extends Component {
           >
             <PinIcon />
           </FrameButton>
-          <Render
+          {/* 默认关闭全屏切换的按钮 */}
+          {/* <Render
             if={['cypher', 'play', 'play-remote', 'queries'].includes(
               frame.type
             )}
@@ -175,7 +183,7 @@ class FrameTitlebar extends Component {
             >
               {fullscreenIcon}
             </FrameButton>
-          </Render>
+          </Render> */}
           <FrameButton
             title={props.collapse ? 'Expand' : 'Collapse'}
             onClick={() => props.collapseToggle()}
@@ -193,14 +201,15 @@ class FrameTitlebar extends Component {
               <RefreshIcon />
             </FrameButton>
           </Render>
-          <FrameButton
+          {/* 默认不渲染关闭 */}
+          {/* <FrameButton
             title='Close'
             onClick={() =>
               props.onCloseClick(frame.id, frame.requestId, props.request)
             }
           >
             <CloseIcon />
-          </FrameButton>
+          </FrameButton> */}
         </FrameTitlebarButtonSection>
       </StyledFrameTitleBar>
     )

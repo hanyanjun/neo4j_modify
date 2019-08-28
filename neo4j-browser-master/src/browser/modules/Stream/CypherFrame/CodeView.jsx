@@ -64,35 +64,35 @@ export class CodeView extends Component {
     const resultJson = JSON.stringify(request.result.records, null, 2)
     const summaryJson = JSON.stringify(request.result.summary, null, 2)
     return (
-      null
-      // <PaddedDiv>
-      //   <StyledTable>
-      //     <StyledTBody>
-      //       <StyledAlteringTr>
-      //         <StyledStrongTd>Server version</StyledStrongTd>
-      //         <StyledTd>{request.result.summary.server.version}</StyledTd>
-      //       </StyledAlteringTr>
-      //       <StyledAlteringTr>
-      //         <StyledStrongTd>Server address</StyledStrongTd>
-      //         <StyledTd>{request.result.summary.server.address}</StyledTd>
-      //       </StyledAlteringTr>
-      //       <StyledAlteringTr>
-      //         <StyledStrongTd>Query</StyledStrongTd>
-      //         <StyledTd>{query}</StyledTd>
-      //       </StyledAlteringTr>
-      //       <ExpandableContent
-      //         title='Summary'
-      //         content={<pre>{summaryJson}</pre>}
-      //         summary={summaryJson.split('\n').slice(0, 3) + ' ...'}
-      //       />
-      //       <ExpandableContent
-      //         title='Response'
-      //         content={<pre>{resultJson}</pre>}
-      //         summary={resultJson.split('\n').slice(0, 3) + ' ...'}
-      //       />
-      //     </StyledTBody>
-      //   </StyledTable>
-      // </PaddedDiv>
+      // null
+      <PaddedDiv>
+        <StyledTable>
+          <StyledTBody>
+            <StyledAlteringTr>
+              <StyledStrongTd>Server version</StyledStrongTd>
+              <StyledTd>{request.result.summary.server.version}</StyledTd>
+            </StyledAlteringTr>
+            <StyledAlteringTr>
+              <StyledStrongTd>Server address</StyledStrongTd>
+              <StyledTd>{request.result.summary.server.address}</StyledTd>
+            </StyledAlteringTr>
+            <StyledAlteringTr>
+              <StyledStrongTd>Query</StyledStrongTd>
+              <StyledTd>{query}</StyledTd>
+            </StyledAlteringTr>
+            <ExpandableContent
+              title='Summary'
+              content={<pre>{summaryJson}</pre>}
+              summary={summaryJson.split('\n').slice(0, 3) + ' ...'}
+            />
+            <ExpandableContent
+              title='Response'
+              content={<pre>{resultJson}</pre>}
+              summary={resultJson.split('\n').slice(0, 3) + ' ...'}
+            />
+          </StyledTBody>
+        </StyledTable>
+      </PaddedDiv>
     )
   }
 }

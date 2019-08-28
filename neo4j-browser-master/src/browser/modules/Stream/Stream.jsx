@@ -110,15 +110,30 @@ class Stream extends PureComponent {
             } catch (e) {}
           }
           // return null;
-          return (index == 0 || index == this.props.frames.length -1  || index == this.props.frames.length - 2 ) ? <MyFrame {...frameProps} key={frame.id} /> : null;
+          return <MyFrame {...frameProps} key={frame.id} /> ;
         })}
       </StyledStream>
     )
   }
 }
 
+
 const mapStateToProps = state => {
-  const frames = getFrames(state)
+  let frames = getFrames(state);
+  //控制  graph 每次只显示一个
+  // if(frames.length == 4){
+  //   frames = frames.filter((v,i)=>{
+  //     return i != 1;
+  //   })
+  // }
+  let activeConnectionData = getActiveConnectionData(state);
+  if(activeConnectionData && (activeConnectionData.username ||  !activeConnectionData.authEnabled)){
+    if(frames.length >= 3){
+      frames = [frames[0]];
+    }else{
+      frames = [];
+    }
+  }
   return {
     framesSignature: frames
       .map(frame => frame.id + (frame.requestId || ''))

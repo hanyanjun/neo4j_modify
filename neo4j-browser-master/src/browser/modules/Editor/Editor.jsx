@@ -118,6 +118,7 @@ export class Editor extends Component {
   }
 
   execCurrent () {
+    // console.log(this.getEditorValue());
     this.props.onExecute(this.getEditorValue())
     this.clearEditor()
     this.setState({
@@ -221,7 +222,10 @@ export class Editor extends Component {
   }
 
   componentDidMount () {
-    this.loadCodeMirror()
+    this.loadCodeMirror();
+    
+    // 默认设置一个graph
+    // this.props.onExecute('MATCH p=()-[r:BELONG_TO]->() RETURN p LIMIT 25')
   }
   loadCodeMirror = () => {
     if (this.codeMirror) {
@@ -466,7 +470,9 @@ const mapDispatchToProps = (dispatch, ownProps) => {
       ownProps.bus.send(action.type, action)
     },
     onExecute: cmd => {
-      const action = executeCommand(cmd)
+      const action = executeCommand(cmd);
+
+      console.log(action);
       ownProps.bus.send(action.type, action)
     }
   }

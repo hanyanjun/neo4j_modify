@@ -21,6 +21,7 @@
 import React, { Component } from 'react'
 import { createGraph, mapRelationships, getGraphStats } from '../mapper'
 import { GraphEventHandler } from '../GraphEventHandler'
+import Search from "../../search/search";
 import '../lib/visualization/index'
 import { dim } from 'browser-styles/constants'
 import { StyledZoomHolder, StyledSvgWrapper, StyledZoomButton } from './styled'
@@ -31,7 +32,10 @@ export class GraphComponent extends Component {
   state = {
     zoomInLimitReached: true,
     zoomOutLimitReached: false,
-    shouldResize: false
+    shouldResize: false,
+    info : {
+      
+    }
   }
 
   graphInit (el) {
@@ -84,6 +88,7 @@ export class GraphComponent extends Component {
           height: this.getVisualAreaHeight()
         }
       }
+      console.log('graph',this.props.nodes,this.props.relationships)
       this.graph = createGraph(this.props.nodes, this.props.relationships)
       this.graphView = new NeoConstructor(
         this.svgElement,
@@ -99,6 +104,9 @@ export class GraphComponent extends Component {
         this.props.onItemSelect,
         this.props.onGraphModelChange
       )
+      this.setState({
+        info : this.graphEH
+      })
       this.graphEH.bindEventHandlers()
       this.props.onGraphModelChange(getGraphStats(this.graph))
       this.graphView.resize()
@@ -164,8 +172,12 @@ export class GraphComponent extends Component {
   }
 
   render () {
+    let {info} = this.state;
+    // console.log(info);
     return (
       <StyledSvgWrapper>
+        {/* 将图实例传递给子组件 */}
+         <Search GraphEventHandler={{...info}}></Search>
         <svg className='neod3viz' ref={this.graphInit.bind(this)} />
         {this.zoomButtons()}
       </StyledSvgWrapper>

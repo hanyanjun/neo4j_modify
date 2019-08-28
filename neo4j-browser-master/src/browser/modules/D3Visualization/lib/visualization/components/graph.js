@@ -51,6 +51,7 @@ export default class Graph {
   groupedRelationships () {
     const groups = {}
     for (let relationship of Array.from(this._relationships)) {
+      // console.log(relationship)
       let nodePair = new NodePair(relationship.source, relationship.target)
       nodePair = groups[nodePair] != null ? groups[nodePair] : nodePair
       nodePair.relationships.push(relationship)

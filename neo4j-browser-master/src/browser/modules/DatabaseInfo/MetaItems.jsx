@@ -125,6 +125,7 @@ const LabelItems = ({
     </DrawerSection>
   )
 }
+
 const RelationshipItems = ({
   relationshipTypes = [],
   totalNumItems,

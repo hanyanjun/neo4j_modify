@@ -153,10 +153,21 @@ export const StyledInspectorFooter = styled.div`
   white-space: normal;
   overflow: scroll;
   &.contracted {
-    max-height: ${inspectorFooterContractedHeight}px;
     overflow: hidden;
   }
 `
+
+// export const StyledInspectorFooter = styled.div`
+//   margin-top: 6px;
+//   font-size: 12px;
+//   width: 100%;
+//   white-space: normal;
+//   overflow: scroll;
+//   &.contracted {
+//     max-height: ${inspectorFooterContractedHeight}px;
+//     overflow: hidden;
+//   }
+// `
 
 export const StyledInspectorFooterRow = styled.ul`
   list-style: none;
@@ -215,7 +226,6 @@ export const StyledStatus = styled.div`
   margin-bottom: 0;
   width: 100%;
   margin-top: 3px;
-  max-height: 64px;
   overflow: auto;
 `
 
@@ -268,10 +278,16 @@ export const StyledLegendContents = styled.ul`
 export const StyledLegendRow = styled.div`
   border-bottom: 1px solid #e6e9ef;
   &.contracted {
-    max-height: ${legendRowHeight}px;
     overflow: hidden;
   }
 `
+// 将默认最大高度去掉
+// export const StyledLegendRow = styled.div`
+//   border-bottom: 1px solid #e6e9ef;
+//   &.contracted {
+//     max-height: ${legendRowHeight}px;
+//     overflow: hidden;
+//   }
 export const StyledLegend = styled.div`
   background-color: ${props => props.theme.secondaryBackground};
   position: absolute;

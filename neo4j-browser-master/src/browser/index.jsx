@@ -18,6 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 import './init.js'
+import 'antd/dist/antd.css';
 import React from 'react'
 import ReactDOM from 'react-dom'
 import AppInit from './AppInit.jsx'

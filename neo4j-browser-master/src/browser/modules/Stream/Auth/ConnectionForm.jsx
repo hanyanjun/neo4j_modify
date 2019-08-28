@@ -64,6 +64,8 @@ export class ConnectionForm extends Component {
   connect = (doneFn = () => {}) => {
     this.props.error({})
     this.props.bus.self(CONNECT, this.state, res => {
+      // http://192.168.0.21:18474/browser/   账号是neo4j  密码test12345
+      console.log(this.state);
       doneFn()
       if (res.success) {
         this.saveAndStart()
@@ -75,6 +77,21 @@ export class ConnectionForm extends Component {
         }
       }
     })
+  }
+  // 设置默认的账户用户名密码
+  componentDidMount(){
+    // 渲染此组建 默认 登陆
+    
+    this.setState({
+      username : 'neo4j',
+      password : 'xorder',
+      hostInputVal : 'http://kg.xorder.ai:7474',
+      host : 'http://kg.xorder.ai:7474'
+    
+    },()=>{
+      this.connect.call(this);
+    })
+  
   }
   onUsernameChange (event) {
     const username = event.target.value

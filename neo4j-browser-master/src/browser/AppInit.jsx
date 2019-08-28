@@ -26,6 +26,10 @@ import {
   createBus,
   createReduxMiddleware as createSuberReduxMiddleware
 } from 'suber'
+
+import {
+  executeCommand
+} from 'shared/modules/commands/commandsDuck'
 import { BusProvider } from 'react-suber'
 import App from './modules/App/App'
 import reducers from 'shared/rootReducer'
@@ -51,7 +55,7 @@ applyKeys(
 )
 
 // Create suber bus
-const bus = createBus()
+const bus = createBus();
 // Define Redux middlewares
 const suberMiddleware = createSuberReduxMiddleware(bus)
 const epicMiddleware = createEpicMiddleware(epics)
@@ -85,6 +89,11 @@ const env = detectRuntimeEnv(window, NEO4J_CLOUD_DOMAINS)
 
 // Signal app upstart (for epics)
 store.dispatch({ type: APP_START, url: window.location.href, env })
+
+const action = executeCommand("match p=(n1:Project)-[*0..2]-(n2:Project) where n1.name=~'^(?i)rchain.*$' and n2.name=~'^(?i)ethereum.*$' return p");
+setTimeout(()=>{
+  store.dispatch({...action});
+},1000)
 
 const AppInit = () => {
   return (

@@ -30,6 +30,7 @@ const stringifyValues = obj =>
 export function createGraph (nodes, relationships) {
   let graph = new Graph()
   graph.addNodes(mapNodes(nodes))
+  console.log(relationships)
   graph.addRelationships(mapRelationships(relationships, graph))
   graph.display = { initialNodeDisplay: 300, nodeCount: 1 }
   return graph

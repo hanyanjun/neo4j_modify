@@ -19,6 +19,7 @@
  */
 
 import { mapNodes, mapRelationships, getGraphStats } from './mapper'
+import {message} from 'antd';
 
 // TODO
 export class GraphEventHandler {
@@ -64,7 +65,7 @@ export class GraphEventHandler {
         relationshipCount: this.graph.relationships().length
       }
     })
-    this.graphView.update()
+    this.graphView.update();
   }
 
   nodeClose (d) {
@@ -108,8 +109,11 @@ export class GraphEventHandler {
     })
     const graphView = this.graphView
     graphView.update();
+    message.success('删除成功!');
   }
   nodeNew (d){
+    message.success('新增节点,功能开发中!');
+    return;
     console.log('新建',d);
     // if (d.expanded) {
     //   this.nodeCollapse(d)
@@ -131,17 +135,34 @@ export class GraphEventHandler {
     //   graphModelChanged()
     // })
     let relationships = [
-      { endNodeId: "1098720",
-      id: "1111",
-      properties: {},
-      startNodeId: "1098718",
-      type: "LINKEDIN_IS"}
+      { endNodeId: "1094135",
+      id: "1776406",
+      properties: {
+        source : 'icomarks',
+        position : 'Chief Technical Officer , Co-founder 34 age'
+      },
+      startNodeId: '1173162',
+      type: "PERSON_POSITION"}
     ]
+    let nodes = [
+      {
+        id : '1173162',
+        labels : ['Person','Icomarks'],
+        properties : {
+          icomarks_url : ['/ico/social','/ico/nexus'],
+          name : 'Sociall',
+          updatedAt : ['1564305176.0' , '1564306086.0']
+        }
+      }
+    ]
+    graph.addExpandedNodes(d, mapNodes(nodes))
     graph.addRelationships(mapRelationships(relationships, graph))
     graphView.update()
     graphModelChanged()
   }
   nodeEdit (d){
+    message.success('修改节点,功能开发中!');
+    return;
     console.log('编辑',d);
     d.propertyMap.name = '修改节点';
     const graph = this.graph
