@@ -171,7 +171,6 @@ export class Search extends Component {
         })
         const { graph, graphView } = info;
         axios.post('/neo4j_browser/applyNodeQuery',{node1 : select1.id , node2 : select3.id , relation : select2}).then(obj=>{
-            console.log(obj);
             let result = obj.data.results;
             if(result.length > 0 ){
                 let nodes = [], relationships = [];

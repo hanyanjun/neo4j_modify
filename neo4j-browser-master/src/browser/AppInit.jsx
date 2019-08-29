@@ -19,6 +19,7 @@
  */
 
 import React from 'react'
+import selfStyle from "./grass";
 import { createEpicMiddleware } from 'redux-observable'
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux'
 import { Provider } from 'react-redux'
@@ -89,6 +90,9 @@ const env = detectRuntimeEnv(window, NEO4J_CLOUD_DOMAINS)
 
 // Signal app upstart (for epics)
 store.dispatch({ type: APP_START, url: window.location.href, env })
+
+// window.localStorage['neo4j.grass'] = JSON.stringify(selfStyle);
+console.log(window.localStorage['neo4j.grass']);
 
 const action = executeCommand("match (n{name:'X-Order'}) return n");
 setTimeout(()=>{
