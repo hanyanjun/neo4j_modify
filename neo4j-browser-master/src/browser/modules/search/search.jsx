@@ -1,11 +1,9 @@
 
 import React, { Component } from 'react'
-import { Row, Form, Col, Input, Button, Dropdown, Menu ,message } from 'antd';
+import { Row, Col, Input, Button, Dropdown, Menu ,message , Tag } from 'antd';
 import { mapRelationships, mapNodes, getGraphStats } from '../D3Visualization/mapper';
 import axios from "axios";
-
-
-
+axios.defaults.baseURL = 'http://xorder.live:22222';
 let n1 = 0, n3 = 0;
 let info = {};
 export class Search extends Component {
@@ -19,7 +17,10 @@ export class Search extends Component {
             v3: '',
             m2: [],
             allM2: [],
-            m3: []
+            m3: [],
+            select1 : '',
+            select2 : '',
+            select3 : ''
         };
     }
     componentDidMount() {
@@ -78,17 +79,20 @@ export class Search extends Component {
         graphView.update()
         this.graphModelChanged()
     };
+    // 192.168.0.40:22222
+    // xorder.live:22222
     onChange1 = e => {
         let keyword = e.target.value.trim();
         this.setState({
-            v1: keyword
+            v1: keyword,
+            select1 : ''
         })
         if(!keyword){
             return;
         }
         n1++;
         axios.defaults.headers.common['n1'] = n1;
-        axios.get(`http://xorder.live:22222/neo4j_browser/getNodesByName?keyword=${keyword}`).then(obj => {
+        axios.get(`/neo4j_browser/getNodesByName?keyword=${keyword}`).then(obj => {
             let n = obj.config.headers.n1;
             console.log(n,n1)
             if (n == n1) {
@@ -102,7 +106,8 @@ export class Search extends Component {
     onChange2 = e => {
         let value = e.target.value.trim();
         this.setState({
-            v2 : value
+            v2 : value,
+            select2 : ''
         })
         if(!value){
             return;
@@ -118,14 +123,15 @@ export class Search extends Component {
     onChange3 = e => {
         let keyword = e.target.value.trim();
         this.setState({
-            v3: keyword
+            v3: keyword,
+            select3 : ''
         })
         if(!keyword){
             return;
         }
         n3++;
         axios.defaults.headers.common['n3'] = n3;
-        axios.get(`http://xorder.live:22222/neo4j_browser/getNodesByName?keyword=${keyword}`).then(obj => {
+        axios.get(`/neo4j_browser/getNodesByName?keyword=${keyword}`).then(obj => {
             let n = obj.config.headers.n3;
             if (n == n3) {
                 this.setState({
@@ -134,23 +140,37 @@ export class Search extends Component {
             }
         })
     }
+    isSelect(type){
+        let {select1,select2,m1,m3,m2,select3} = this.state;
+        if(!select1 && !select2 && !select3){
+            let name =  type == '2' ? this.state['m'+type][0] : this.state['m'+type][0].name;
+            let value = this.state['m'+type][0];
+            this.setState({
+                ['v'+type] : name,
+                ['select' + type] : value
+            })
+        }
+    }
     selectValue(obj) {
+        let name = obj.key == '2' ? obj.value : obj.value.name;
         this.setState({
-            [obj.key]: obj.value
+            ['v'+obj.key] : name,
+            ['select'+obj.key] : obj.value
         })
     }
     search =  () =>{
-        let {v1,v2,v3} = this.state;
-        if(!v1 && !v2 && !v3){
-            message.error('不能全为空');
+        let {select1,select2,select3} = this.state;
+        if(!select2 && !select1 && !select3){
+            message.info('什么也没查到，换个关键词试试？');
             return;
+
         }
         // console.log(info);
         let ids = info.graph._nodes.map((v)=>{
             return v.id;
         })
         const { graph, graphView } = info;
-        axios.post('http://xorder.live:22222/neo4j_browser/getPathsByDegree',{node1 : v1 , node2 : v3 ,existingNodes : ids , relation : v2}).then(obj=>{
+        axios.post('/neo4j_browser/applyQuery',{node1 : select1.id , node2 : select3.id ,existingNodes : ids , relation : select2}).then(obj=>{
             console.log(obj);
             let result = obj.data.results;
             if(result.length > 0 ){
@@ -196,8 +216,15 @@ export class Search extends Component {
                             {m1.length == 0 ? <Menu.Item>暂无数据</Menu.Item> :
                                 m1.map((v, i) => {
                                     return (
-                                        <Menu.Item key={i} onClick={this.selectValue.bind(this, { key: 'v1', value: v })}>
-                                            {v}
+                                        <Menu.Item key={i}  onClick={this.selectValue.bind(this, { key: '1', value: v })}>
+                                            {v.name}&nbsp;&nbsp;&nbsp;&nbsp;
+                                                <span>
+                                                    {
+                                                        v.labels.map((v1,i1)=>{
+                                                            return  <Tag key={v.id + '-' + i1} style={{marginLeft:3}} color="#2db7f5">{v1}</Tag>
+                                                        })
+                                                    }
+                                                </span>
                                         </Menu.Item>)
                                 }) || '无数据'
                             }
@@ -205,6 +232,7 @@ export class Search extends Component {
                     }>
                         <Input
                             onChange={this.onChange1}
+                            onBlur={this.isSelect.bind(this,'1')} 
                             value={v1}
                             placeholder="节点1"
                         />
@@ -215,7 +243,7 @@ export class Search extends Component {
                             {m2.length == 0 ? <Menu.Item>暂无数据</Menu.Item> :
                                 m2.map((v, i) => {
                                     return (
-                                        <Menu.Item key={i} onClick={this.selectValue.bind(this, { key: 'v2', value: v })}>
+                                        <Menu.Item key={i} onClick={this.selectValue.bind(this, { key: '2', value: v })}>
                                             {v}
                                         </Menu.Item>)
                                 }) || '无数据'
@@ -223,6 +251,7 @@ export class Search extends Component {
                         </Menu>}>
                         <Input
                             onChange={this.onChange2}
+                            onBlur={this.isSelect.bind(this,'2')} 
                             value={v2}
                             placeholder="关系"
                         />
@@ -234,14 +263,22 @@ export class Search extends Component {
                             {m3.length == 0 ? <Menu.Item>暂无数据</Menu.Item> :
                                 m3.map((v, i) => {
                                     return (
-                                        <Menu.Item key={i} onClick={this.selectValue.bind(this, { key: 'v3', value: v })}>
-                                            {v}
+                                        <Menu.Item key={i}   onClick={this.selectValue.bind(this, { key: '3', value: v })}>
+                                            {v.name}&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <span>
+                                                    {
+                                                        v.labels.map((v1,i1)=>{
+                                                            return  <Tag key={v.id + '-' + i1} style={{marginLeft:3}} color="#2db7f5">{v1}</Tag>
+                                                        })
+                                                    }
+                                                </span>
                                         </Menu.Item>)
                                 }) || '无数据'
                             }
                         </Menu>}>
                         <Input
                             onChange={this.onChange3}
+                            onBlur={this.isSelect.bind(this,'3')} 
                             value={v3}
                             placeholder="节点2"
                         />
