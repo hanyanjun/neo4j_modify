@@ -170,38 +170,49 @@ export class Search extends Component {
             return v.id;
         })
         const { graph, graphView } = info;
-        axios.post('/neo4j_browser/applyQuery',{node1 : select1.id , node2 : select3.id ,existingNodes : ids , relation : select2}).then(obj=>{
+        axios.post('/neo4j_browser/applyNodeQuery',{node1 : select1.id , node2 : select3.id , relation : select2}).then(obj=>{
             console.log(obj);
             let result = obj.data.results;
             if(result.length > 0 ){
                 let nodes = [], relationships = [];
                 if(result[0].data.length > 0){
                     result[0].data.forEach(v => {
-                        nodes = nodes.concat(v.graph.nodes);
-                        relationships = relationships.concat(v.graph.relationships);   
+                        nodes = nodes.concat(v.graph.nodes); 
                     });     
-                    let arr  = [];
+                    let newNodes  = [];
                     nodes = nodes.filter(v=>{
-                        let is = arr.indexOf(v.id);
+                        let is = newNodes.indexOf(v.id);
                         if(is == -1){
-                            arr.push(v.id);
+                            newNodes.push(v.id);
                             return true
                         }else{
                             return false;
                         }
                     })
-                    // 之前没有生成成功是因为没有设置startNodeId 和 endNodeId
-                    relationships.forEach(v=>{
-                        v.startNodeId = v.startNode;
-                        v.endNodeId = v.endNode;
+                    axios.post('/neo4j_browser/applyRelationQuery',{existingNodes : ids.concat(newNodes) , newNodes}).then(obj1=>{
+                        let result1 = obj1.data.results;
+                        if(result1.length > 0 ){
+                            if(result1[0].data.length > 0){
+                                result1[0].data.forEach(v => {
+                                    relationships = relationships.concat(v.graph.relationships);   
+                                });  
+                                // 之前没有生成成功是因为没有设置startNodeId 和 endNodeId
+                                relationships.forEach(v=>{
+                                    v.startNodeId = v.startNode;
+                                    v.endNodeId = v.endNode;
+                                })
+                            }
+                        }
+                        graph.addNodes(mapNodes(nodes));
+                        if(relationships.length > 0 ){
+                            graph.addRelationships(mapRelationships(relationships, graph))
+                        }
+                        graphView.update()
+                        this.graphModelChanged()
                     })
-                    graph.addNodes(mapNodes(nodes));
-                    graph.addRelationships(mapRelationships(relationships, graph))
-                    graphView.update()
-                    this.graphModelChanged()
+
                 }
             }
-
         })
     }
 

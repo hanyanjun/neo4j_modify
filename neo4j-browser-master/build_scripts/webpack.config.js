@@ -84,7 +84,7 @@ module.exports = {
   devtool: helpers.isProduction ? false : 'inline-source-map',
   devServer: {
     host: '0.0.0.0',
-    port: 8080,
+    port: 8081,
     disableHostCheck: true,
     hot: !helpers.isProduction
   }
