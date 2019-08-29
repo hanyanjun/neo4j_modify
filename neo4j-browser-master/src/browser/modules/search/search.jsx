@@ -210,6 +210,8 @@ export class Search extends Component {
                         this.graphModelChanged()
                     })
 
+                }else{
+                    message.info('未检索到任何结果');
                 }
             }else{
                 message.info('未检索到任何结果');
