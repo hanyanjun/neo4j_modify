@@ -42,10 +42,8 @@ const Main = React.memo(function Main (props) {
   return (
     <StyledMain data-testid='main'>
       {/* 输入命令行的部分 */}
-      <ErrorBoundary>
+      {/* <ErrorBoundary>
         <Editor />
-        {/* 改成联想输入的部分 */}
-        
       </ErrorBoundary>
       <Render if={props.showUnknownCommandBanner}>
         <ErrorBanner>
@@ -82,7 +80,7 @@ const Main = React.memo(function Main (props) {
       </Render>
       <Render if={props.useBrowserSync}>
         <SyncReminderBanner />
-      </Render>
+      </Render> */}
       {/* <Render if={props.useBrowserSync}>
         <SyncConsentBanner />
       </Render> */}

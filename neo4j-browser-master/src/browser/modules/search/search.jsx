@@ -212,6 +212,8 @@ export class Search extends Component {
                     })
 
                 }
+            }else{
+                message.info('未检索到任何结果');
             }
         })
     }

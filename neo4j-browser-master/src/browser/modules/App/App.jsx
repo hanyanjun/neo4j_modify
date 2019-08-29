@@ -127,65 +127,65 @@ export function App (props) {
 
   return (
     <ErrorBoundary>
-      <ThemeProvider theme={themeData}>
-        <FeatureToggleProvider features={experimentalFeatures}>
-          <FileDrop store={store}>
-            <StyledWrapper className='app-wrapper'>
-              <DocTitle titleString={props.titleString} />
-              <UserInteraction />
-              <DesktopIntegration
-                integrationPoint={props.desktopIntegrationPoint}
-                onArgumentsChange={props.onArgumentsChange}
-                onMount={(
+    <ThemeProvider theme={themeData}>
+      <FeatureToggleProvider features={experimentalFeatures}>
+        <FileDrop store={store}>
+          <StyledWrapper className='app-wrapper'>
+            <DocTitle titleString={props.titleString} />
+            <UserInteraction />
+            <DesktopIntegration
+              integrationPoint={props.desktopIntegrationPoint}
+              onArgumentsChange={props.onArgumentsChange}
+              onMount={(
+                activeGraph,
+                connectionsCredentials,
+                context,
+                getKerberosTicket
+              ) => {
+                props.setInitialConnectionData(
                   activeGraph,
                   connectionsCredentials,
                   context,
                   getKerberosTicket
-                ) => {
-                  props.setInitialConnectionData(
-                    activeGraph,
-                    connectionsCredentials,
-                    context,
-                    getKerberosTicket
-                  )
-                  detectDesktopThemeChanges(null, context)
-                }}
-                onGraphActive={props.switchConnection}
-                onGraphInactive={props.closeConnectionMaybe}
-                onColorSchemeUpdated={detectDesktopThemeChanges}
+                )
+                detectDesktopThemeChanges(null, context)
+              }}
+              onGraphActive={props.switchConnection}
+              onGraphInactive={props.closeConnectionMaybe}
+              onColorSchemeUpdated={detectDesktopThemeChanges}
+            />
+            <Render if={loadExternalScripts}>
+              <Intercom appID='lq70afwx' />
+            </Render>
+            <Render if={syncConsent && loadExternalScripts && loadSync}>
+              <BrowserSyncInit
+                authStatus={browserSyncAuthStatus}
+                authData={browserSyncMetadata}
+                config={browserSyncConfig}
               />
-              <Render if={loadExternalScripts}>
-                <Intercom appID='lq70afwx' />
-              </Render>
-              <Render if={syncConsent && loadExternalScripts && loadSync}>
-                <BrowserSyncInit
-                  authStatus={browserSyncAuthStatus}
-                  authData={browserSyncMetadata}
-                  config={browserSyncConfig}
-                />
-              </Render>
-              {/* 主要内容部分 */}
-              <StyledApp>
-                <StyledBody>
-                  <ErrorBoundary>
-                    <Sidebar openDrawer={drawer} onNavClick={handleNavClick} />
-                  </ErrorBoundary>
-                  <StyledMainWrapper>
-                    {/* 中间视图部分 */}
-                    <Main
-                      cmdchar={cmdchar}
-                      activeConnection={activeConnection}
-                      connectionState={connectionState}
-                      errorMessage={errorMessage}
-                      useBrowserSync={loadSync}
-                    />
-                  </StyledMainWrapper>
-                </StyledBody>
-              </StyledApp>
-            </StyledWrapper>
-          </FileDrop>
-        </FeatureToggleProvider>
-      </ThemeProvider>
+            </Render>
+            {/* 主要内容部分 */}
+            <StyledApp>
+              <StyledBody>
+                {/* <ErrorBoundary>
+                  <Sidebar openDrawer={drawer} onNavClick={handleNavClick} />
+                </ErrorBoundary> */}
+                <StyledMainWrapper>
+                  {/* 中间视图部分 */}
+                  <Main
+                    cmdchar={cmdchar}
+                    activeConnection={activeConnection}
+                    connectionState={connectionState}
+                    errorMessage={errorMessage}
+                    useBrowserSync={loadSync}
+                  />
+                </StyledMainWrapper>
+              </StyledBody>
+            </StyledApp>
+          </StyledWrapper>
+        </FileDrop>
+      </FeatureToggleProvider>
+    </ThemeProvider>
     </ErrorBoundary>
   )
 }
