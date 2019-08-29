@@ -24,7 +24,7 @@ export class Search extends Component {
         };
     }
     componentDidMount() {
-        axios.get('http://xorder.live:22222/neo4j_browser/getRelationNames').then(obj => {
+        axios.get('/neo4j_browser/getRelationNames').then(obj => {
             this.setState({
                 allM2: obj.data.result,
                 m2: obj.data.result
