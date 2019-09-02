@@ -82,12 +82,12 @@ export class Search extends Component {
     // 192.168.0.40:22222
     // xorder.live:22222
     onChange1 = e => {
-        let keyword = e.target.value.trim();
+        let keyword = e.target.value;
         this.setState({
             v1: keyword,
             select1 : ''
         })
-        if(!keyword){
+        if(!keyword || !keyword.trim()){
             return;
         }
         n1++;
@@ -104,7 +104,7 @@ export class Search extends Component {
 
     }
     onChange2 = e => {
-        let value = e.target.value.trim();
+        let value = e.target.value;
         this.setState({
             v2 : value,
             select2 : ''
@@ -121,12 +121,12 @@ export class Search extends Component {
         })
     }
     onChange3 = e => {
-        let keyword = e.target.value.trim();
+        let keyword = e.target.value;
         this.setState({
             v3: keyword,
             select3 : ''
         })
-        if(!keyword){
+        if(!keyword || !keyword.trim()){
             return;
         }
         n3++;
@@ -160,7 +160,7 @@ export class Search extends Component {
     }
     search =  () =>{
         let {select1,select2,select3} = this.state;
-        if(!select2 && !select1 && !select3){
+        if((!select2  || !select2.trim() ) && (!select1 || !select1.trim()) && (!select3 || !select3.trim())){
             message.info('什么也没查到，换个关键词试试？');
             return;
 
