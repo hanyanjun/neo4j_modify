@@ -151,6 +151,18 @@ export class Search extends Component {
             })
         }
     }
+    reset = ()=>{
+        this.setState({
+            select1 : '',
+            select2 : '',
+            select3 : '',
+            m1 : [],
+            m3 : [],
+            v1 : '',
+            v2 : '',
+            v3 : ''
+        })
+    }
     selectValue(obj) {
         let name = obj.key == '2' ? obj.value : obj.value.name;
         this.setState({
@@ -160,7 +172,8 @@ export class Search extends Component {
     }
     search =  () =>{
         let {select1,select2,select3} = this.state;
-        if((!select2  || !select2.trim() ) && (!select1 || !select1.trim()) && (!select3 || !select3.trim())){
+        console.log(select1)
+        if(!select1 && !select2 && !select3){
             message.info('什么也没查到，换个关键词试试？');
             return;
 
@@ -223,8 +236,8 @@ export class Search extends Component {
     render() {
         const { m1, m2, m3, v1, v2, v3 } = this.state;
         return (
-            <Row>
-                <Col span={5} offset={3}>
+            <Row style={{width : '80%'}}>
+                <Col span={3} offset={1}>
                     <Dropdown  overlayStyle={{maxHeight : 400 , overflowY : 'scroll'}}  overlay={
                         <Menu>
                             {m1.length == 0 ? <Menu.Item>暂无数据</Menu.Item> :
@@ -251,7 +264,7 @@ export class Search extends Component {
                             placeholder="节点1"
                         />
                     </Dropdown></Col>
-                <Col span={5} offset={1}>
+                <Col span={3} offset={1}>
                     <Dropdown overlayStyle={{maxHeight : 400 , overflowY : 'scroll'}} overlay={
                         <Menu>
                             {m2.length == 0 ? <Menu.Item>暂无数据</Menu.Item> :
@@ -271,7 +284,7 @@ export class Search extends Component {
                         />
                     </Dropdown>
                 </Col>
-                <Col span={5} offset={1}>
+                <Col span={3} offset={1}>
                     <Dropdown overlayStyle={{maxHeight : 400 , overflowY : 'scroll'}} overlay={
                         <Menu>
                             {m3.length == 0 ? <Menu.Item>暂无数据</Menu.Item> :
@@ -298,12 +311,14 @@ export class Search extends Component {
                         />
                     </Dropdown>
                 </Col>
-                <Col span={1}  offset={2}>
-                    <Button type="primary" onClick={this.search}>
+                <Col span={4} offset={1}>
+                    <Button type="primary"  onClick={this.search}>
                         搜索
           </Button>
+                    <Button  style={{marginLeft : 10}}  onClick={this.reset}>
+                       重置搜索
+          </Button>
                 </Col>
-
             </Row>
         )
     }
