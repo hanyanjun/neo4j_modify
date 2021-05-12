@@ -126,7 +126,7 @@
     "ascii-data-table": "^2.1.1",
     "axios": "^0.19.0",
     "classnames": "^2.2.5",
-    "codemirror": "^5.29.0",
+    "codemirror": "^5.58.2",
     "core-js": "3",
     "cypher-codemirror": "1.1.5",
     "d3": "3",
